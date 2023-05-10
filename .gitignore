@@ -9,3 +9,14 @@ out/
 
 # Dotenv file
 .env
+
+# Custom
+Makefile
+remappings.txt
+
+# Logs
+/broadcast
+
+# Lib
+/lib
+
