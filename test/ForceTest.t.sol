@@ -36,7 +36,7 @@ contract ForceTest is Test, SepoliaInstances{
         payable(forceAddress).transfer(1e18);
 
         // call
-        (bool success, bytes memory data) =  address(force).call{value: 1e18}("");
+        (bool success, ) =  address(force).call{value: 1e18}("");
         assertFalse(success);
 
         // selfdestruct if the solution had a receive function implemented

@@ -41,7 +41,7 @@ contract VaultTest is Test {
         console.log("After reading", value);
     }
 
-    function testReadPrivateVarFromStorage() public {
+    function testReadPrivateVarFromStorage() public view {
         // Loads a storage slot from an address
         // function load(address target, bytes32 slot) external view returns (bytes32 data);
         // secret sits at storage slot 2

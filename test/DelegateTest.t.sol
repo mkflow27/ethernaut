@@ -31,7 +31,7 @@ contract DelegateTest is Test, SepoliaInstances {
         // is empty and will therefor not manage to call `pwn` on `Delegate
         // (bool success, bytes memory result) = address(delegation).call("");
 
-        (bool success, bytes memory result) = address(delegation).call(abi.encodeWithSignature("pwn()"));
+        address(delegation).call(abi.encodeWithSignature("pwn()"));
 
         assertEq(delegation.owner(), player);
     }
