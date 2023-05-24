@@ -12,11 +12,9 @@ out/
 
 # Custom
 Makefile
-remappings.txt
 
 # Logs
 /broadcast
 
-# Lib
-/lib
+
 
