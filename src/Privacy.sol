@@ -8,6 +8,7 @@ contract Privacy {
   uint8 private flattening = 10;
   uint8 private denomination = 255;
   uint16 private awkwardness = uint16(block.timestamp);
+
   bytes32[3] private data;
 
   constructor(bytes32[3] memory _data) {
@@ -15,7 +16,7 @@ contract Privacy {
   }
   
   function unlock(bytes16 _key) public {
-    require(_key == bytes16(data[2]));
+    require(_key == bytes16(data[2]), "did not solve");
     locked = false;
   }
 

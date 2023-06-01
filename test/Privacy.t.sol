@@ -6,6 +6,22 @@ import "forge-std/Test.sol";
 import "../src/Privacy.sol";
 import "../src/utils/StorageSample.sol";
 
+contract MockPrivacy {
+
+    bytes32[3] private data;
+    bool public locked = true;
+
+
+    constructor(bytes32[3] memory _data) {
+        data = _data;
+    }
+
+    function unlock(bytes16 _key) public {
+        require(_key == bytes16(data[2]));
+        locked = false;
+    }
+}
+
 
 contract PrivacySolutionTest is Test {
 
@@ -19,8 +35,34 @@ contract PrivacySolutionTest is Test {
 
     }
 
-    function testSolve() public {
+    function testMockPrivacy() public {
+        // right-padded: string , bytes and bytesN.
+        //left-padded: intN / uintN (signed/unsigned integers), address and other types.
+        //
+        MockPrivacy privacy = new MockPrivacy([
+            bytes32(0x6162636400000000000000000000000000000000000000000000000000000000),
+            bytes32(0x6162636400000000000000000000000000000000000000000000000000000000),
+            bytes32(0x6162636400000000000000000000000000000000000000000000000000000000)
+            ]);
 
+        assertEq(privacy.locked(), true);
+
+        bytes32 valueSlot0 = vm.load(address(privacy), bytes32(uint256(0)));
+        console.logBytes32(valueSlot0);
+
+        bytes32 valueSlot1 = vm.load(address(privacy), bytes32(uint256(1)));
+        console.logBytes32(valueSlot1);
+
+        bytes32 valueSlot2 = vm.load(address(privacy), bytes32(uint256(2)));
+        console.logBytes32(valueSlot2);
+
+        // typecasting bytes
+        console.log("typecasting bytes");
+        console.logBytes32(bytes16(valueSlot2));
+
+        privacy.unlock(bytes16(valueSlot2));
+
+        assertEq(privacy.locked(), false);
     }
 
     // --- Auxilliary custom understanding helpers ------
@@ -32,7 +74,11 @@ contract PrivacySolutionTest is Test {
      */
     function testStorageLayout() public {
         console.log("PRIVACY STORAGE DATA");
-        Privacy privacy = new Privacy([bytes32(0), bytes32(0), bytes32(0)]);
+        Privacy privacy = new Privacy([
+            bytes32(0x6162636400000000000020000000000000000000000000000000000030000000),
+            bytes32(0x6762636400000000000000010000000000000000000200000000000000000000),
+            bytes32(0x6122636400000000000000000000000020000000004000000000000009000000)
+            ]);
 
         bytes32 valueSlot0 = vm.load(address(privacy), bytes32(uint256(0)));
         console.logBytes32(valueSlot0);
@@ -45,7 +91,25 @@ contract PrivacySolutionTest is Test {
         console.logBytes32(valueSlot2);
 
         bytes32 valueSlot3 = vm.load(address(privacy), bytes32(uint256(3)));
+        console.log("next up is the fixed size array of 3 bytes32 elements");
         console.logBytes32(valueSlot3);
+
+        bytes32 valueSlot4 = vm.load(address(privacy), bytes32(uint256(4)));
+        console.logBytes32(valueSlot4);
+
+        bytes32 valueSlot5 = vm.load(address(privacy), bytes32(uint256(5)));
+        console.logBytes32(valueSlot5);
+
+        bytes32 valueSlot6 = vm.load(address(privacy), bytes32(uint256(6)));
+        console.logBytes32(valueSlot6);
+
+        bytes32 valueSlot7 = vm.load(address(privacy), bytes32(uint256(7)));
+        console.logBytes32(valueSlot7);
+
+        //solve
+        privacy.unlock(bytes16(valueSlot5));
+
+        assertEq(privacy.locked(), false);
     }
 
     function testSomeStorageLayout() public {
