@@ -18,6 +18,7 @@ contract SepoliaInstances {
     address public reentrancyInstance = 0x14A044Afb6544c2f8a71Ffa9Aa555644e71e13dD;
     address public elevatorInstance = 0x198be772ce111B60db85Ce874A13215236314854;
     address public privacyInstance = 0xec879cd6B43Da655753C8dECedF26CE83C069D14;
+    address public naughtCoinInstance = 0x795D174a3754675129345F5996313550AD11F95d;
 
     // player address
     address public player = 0x834866ad4aCB833C60DE49c26B1b0433b0215a2e;
